@@ -60,6 +60,11 @@ class External_Radiation(Files, BB_Engelke_Marengo, Broken_PL, Combination_BB, S
 
 # Dust_Properties
 
+class optical_properties_index():
+    def __init__(self, index=None, **kwargs):
+        super().__init__(**kwargs)
+        self.optical_properties_index = index
+        
 class dust_base_comp():
     def __init__(self, sil_ow=None, sil_oc=None, sil_dl=None, grf_dl=None, amc_hn=None, sic_pg=None, textfile=None, **kwargs):
         super().__init__(**kwargs)
@@ -84,8 +89,13 @@ class dust_input_comp():
         super().__init__(**kwargs)
         self.file = np.array(file)
 
-class dust_chem_comp(dust_base_comp, dust_input_comp):
+class dust_chem_comp(dust_input_comp, dust_base_comp, optical_properties_index):
     pass
+
+class size_distribution():
+    def __init__(self, size_dist=None, **kwargs):
+        super().__init__(**kwargs)
+        self.size_distrubution = size_dist
 
 class mrn_size():
     def __init__(self, expo=None, a_min=None, a_max=None, **kwargs):
@@ -106,7 +116,7 @@ class KMH_dist_size():
         self.a_min = a_min
         self.a0 = a0
 
-class dust_grain_size(mrn_size, KMH_dist_size):
+class dust_grain_size(KMH_dist_size, mrn_size, size_distribution):
     pass
 
 class dust_temp():
@@ -114,11 +124,17 @@ class dust_temp():
         super().__init__(**kwargs)
         self.temp_inner = temp_inner
 
-class dust_properties(dust_base_comp, dust_grain_size, dust_temp):
+class dust_properties(dust_temp, dust_grain_size, dust_base_comp):
     pass
 
 # Density Distribution
-class dd_file(Density_Distribution): 
+
+class density_type():
+    def __init__(self, density_type=None, **kwargs):
+        super().__init__(**kwargs)
+        self.denstiy_type = density_type
+    
+class dd_file: 
     def __init__(self, dd_file = None, **kwargs):
         self.file = dd_file
 
@@ -149,31 +165,37 @@ class broken_PL:
             for power_index in power_indices:
                 self.power_indices.append(power_index)
       
-class Density_Distribution(dd_file, approx_RDW, exact_RDW, exp_decay, broken_PL):
-    def __init__ (self, density_distribution=None, **kwargs):
+class Density_Distribution(dd_file, approx_RDW, exact_RDW, exponetial_decay, broken_PL, density_type):
+    def __init__ (self, **kwargs):
         super().__init__(**kwargs)
-        self.density = density_distribution
         
 # OpticalDepth
+
+class tau_grid():
+    def __init__(self, tau_grid=None, **kwargs):
+        super().__init__(**kwargs)
+        self.tau_grid = tau_grid
+        
 class optical_file:
-    def __init__(self,optical_file = None, **kwargs):
+    def __init__(self, optical_file = None, **kwargs):
         self.file = optical_file 
 
 class step_function: 
     def __init__(self, tau_grid = None, lamba0 = None, tau_min = None, tau_max = None, model_count = None, **kwargs):
-        self.tau_grid = tau grid 
+        self.tau_grid = tau_grid 
         self.lamba0 = lamba0
         self.tau_min = tau_min
         self.tau_max = tau_max
         self.model_count = model_count 
 
-class Optical_Depth(file, step_function):
-    def __init__ (self, optical_depth =None, **kwargs):
+class Optical_Depth(optical_file, step_function, tau_grid):
+    def __init__ (self, **kwargs):
         super().__init__(**kwargs)
-        self.density = optical_depth
+
 
 # Dusty
-class Dusty(External_Radiation, dust_properties, Density_Distribution, Optical_Depth):
+        
+class Dusty(Optical_Depth, Density_Distribution, dust_properties, External_Radiation):
     def __init__(self,name=None, **kwargs):
         super().__init__(**kwargs)
         self.name = name
