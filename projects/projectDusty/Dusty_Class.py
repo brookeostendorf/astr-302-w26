@@ -6,7 +6,11 @@
 ##   (e.g.) class x(Z,Y,X):                                                 ##
 ##                                                                          ##
 
+
+#
 # External Radiation
+#
+
 
 class Spectrum:
     def __init__(self, spectrum=None, **kwargs):
@@ -49,24 +53,28 @@ class BB_Engelke_Marengo:
         self.tbb = tbb
         self.sio_fd = sio_fd
 
-class Files:
-    def __init__(self, file=None, **kwargs):
+class ER_Files:
+    def __init__(self, er_file=None, **kwargs):
         super().__init__(**kwargs)
-        self.file = file
+        self.file_er = er_file
 
-class External_Radiation(Files, BB_Engelke_Marengo, Broken_PL, Combination_BB, Spectrum):
+class External_Radiation(ER_Files, BB_Engelke_Marengo, Broken_PL, Combination_BB, Spectrum):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-# Dust_Properties
 
-class optical_properties_index():
+#        
+# Dust_Properties
+#
+
+
+class optical_properties_index:
     def __init__(self, index=None, **kwargs):
         super().__init__(**kwargs)
         self.optical_properties_index = index
         
-class dust_base_comp():
-    def __init__(self, sil_ow=None, sil_oc=None, sil_dl=None, grf_dl=None, amc_hn=None, sic_pg=None, textfile=None, **kwargs):
+class dust_base_comp:
+    def __init__(self, sil_ow=None, sil_oc=None, sil_dl=None, grf_dl=None, amc_hn=None, sic_pg=None, **kwargs):
         super().__init__(**kwargs)
         self.sil_ow = sil_ow
         self.sil_oc = sil_oc
@@ -74,8 +82,12 @@ class dust_base_comp():
         self.grf_dl = grf_dl
         self.amc_hn = amc_hn
         self.sic_pg = sic_pg
-        self.textfile = np.array(textfile) if textfile is not None else None
-
+        self.file_additional_comp = []
+        
+    def AddFile(self, ac_files):
+        for ac_file in ac_files:
+            self.file_additional_comp.append(ac_file)
+            
     def standard_mixture(self):
         self.sil_ow.value = 0.00
         self.sil_oc.value = 0.00
@@ -84,15 +96,15 @@ class dust_base_comp():
         self.amc_hn.value = 0.00
         self.sic_pg.value = 0.00
 
-class dust_input_comp():
-    def __init__(self, file=None, **kwargs):
+class dust_input_comp:
+    def __init__(self, dc_file=None, **kwargs):
         super().__init__(**kwargs)
-        self.file = np.array(file)
+        self.file_dust_comp = dc_file
 
 class dust_chem_comp(dust_input_comp, dust_base_comp, optical_properties_index):
     pass
 
-class size_distribution():
+class size_distribution:
     def __init__(self, size_dist=None, **kwargs):
         super().__init__(**kwargs)
         self.size_distrubution = size_dist
@@ -109,7 +121,7 @@ class mrn_size():
         self.a_min.value = 0.005
         self.a_max.value = 0.25
 
-class KMH_dist_size():
+class KMH_dist_size:
     def __init__(self, expo=None, a_min=None, a0=None, **kwargs):
         super().__init__(**kwargs)
         self.expo = expo
@@ -119,7 +131,7 @@ class KMH_dist_size():
 class dust_grain_size(KMH_dist_size, mrn_size, size_distribution):
     pass
 
-class dust_temp():
+class dust_temp:
     def __init__(self,temp_inner=None, **kwargs):
         super().__init__(**kwargs)
         self.temp_inner = temp_inner
@@ -127,77 +139,93 @@ class dust_temp():
 class dust_properties(dust_temp, dust_grain_size, dust_base_comp):
     pass
 
-# Density Distribution
 
-class density_type():
+#
+# Density Distribution
+#
+
+
+class density_type:
     def __init__(self, density_type=None, **kwargs):
         super().__init__(**kwargs)
         self.denstiy_type = density_type
     
 class dd_file: 
     def __init__(self, dd_file = None, **kwargs):
-        self.file = dd_file
+        super().__init__(**kwargs)
+        self.file_dd = dd_file
 
 class approx_RDW: 
     def __init__(self, radius = None, **kwargs):
+        super().__init__(**kwargs)
         self.radius = radius
 
 class exact_RDW: 
     def __init__ (self, radius = None, **kwargs):
+        super().__init__(**kwargs)
         self.radius = radius
 
 class exponential_decay:
     def __init__ (self, radius = None, sigma = None, **kwargs):
+        super().__init__(**kwargs)
         self.radius = radius 
         self.sigma = sigma
         
 class broken_PL:
-     def __init__ (self, N_value = None, transition_radii = None, power_indices = None, **kwargs): 
+    def __init__ (self, N_value = None, transition_radii = None, power_indices = None, **kwargs): 
+        super().__init__(**kwargs)
         self.N_value = N_value 
         self.transition_radii = [] 
         self.power_indices = [] 
         
-        def add_radii(self,transition_radii): 
-            for radii in transition_radii:
-                self.transition_radii.append(radii)
+    def add_radii(self,transition_radii): 
+        for radii in transition_radii:
+            self.transition_radii.append(radii)
 
-        def add_power_index(self,power_indices): 
-            for power_index in power_indices:
-                self.power_indices.append(power_index)
-      
-class Density_Distribution(dd_file, approx_RDW, exact_RDW, exponetial_decay, broken_PL, density_type):
+    def add_power_index(self,power_indices): 
+        for power_index in power_indices:
+            self.power_indices.append(power_index)
+  
+class Density_Distribution(dd_file, approx_RDW, exact_RDW, exponential_decay, broken_PL, density_type):
     def __init__ (self, **kwargs):
         super().__init__(**kwargs)
-        
-# OpticalDepth
 
-class tau_grid():
-    def __init__(self, tau_grid=None, **kwargs):
+
+#        
+# OpticalDepth
+#
+
+
+class grid_type:
+    def __init__(self, grid_type=None, **kwargs):
         super().__init__(**kwargs)
-        self.tau_grid = tau_grid
+        self.grid_type = grid_type
         
 class optical_file:
     def __init__(self, optical_file = None, **kwargs):
-        self.file = optical_file 
+        super().__init__(**kwargs)
+        self.file_opt = optical_file 
 
 class step_function: 
     def __init__(self, tau_grid = None, lamba0 = None, tau_min = None, tau_max = None, model_count = None, **kwargs):
+        super().__init__(**kwargs)
         self.tau_grid = tau_grid 
         self.lamba0 = lamba0
         self.tau_min = tau_min
         self.tau_max = tau_max
         self.model_count = model_count 
 
-class Optical_Depth(optical_file, step_function, tau_grid):
+class Optical_Depth(optical_file, step_function, grid_type):
     def __init__ (self, **kwargs):
         super().__init__(**kwargs)
 
 
+#
 # Dusty
+#
+
         
 class Dusty(Optical_Depth, Density_Distribution, dust_properties, External_Radiation):
     def __init__(self,name=None, **kwargs):
         super().__init__(**kwargs)
         self.name = name
-
-    
