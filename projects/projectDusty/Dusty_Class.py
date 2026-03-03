@@ -118,12 +118,62 @@ class dust_properties(dust_base_comp, dust_grain_size, dust_temp):
     pass
 
 # Density Distribution
+class dd_file(Density_Distribution): 
+    def __init__(self, dd_file = None, **kwargs):
+        self.file = dd_file
 
+class approx_RDW: 
+    def __init__(self, radius = None, **kwargs):
+        self.radius = radius
+
+class exact_RDW: 
+    def __init__ (self, radius = None, **kwargs):
+        self.radius = radius
+
+class exponential_decay:
+    def __init__ (self, radius = None, sigma = None, **kwargs):
+        self.radius = radius 
+        self.sigma = sigma
+        
+class broken_PL:
+     def __init__ (self, N_value = None, transition_radii = None, power_indices = None, **kwargs): 
+        self.N_value = N_value 
+        self.transition_radii = [] 
+        self.power_indices = [] 
+        
+        def add_radii(self,transition_radii): 
+            for radii in transition_radii:
+                self.transition_radii.append(radii)
+
+        def add_power_index(self,power_indices): 
+            for power_index in power_indices:
+                self.power_indices.append(power_index)
+      
+class Density_Distribution(dd_file, approx_RDW, exact_RDW, exp_decay, broken_PL):
+    def __init__ (self, density_distribution=None, **kwargs):
+        super().__init__(**kwargs)
+        self.density = density_distribution
+        
 # OpticalDepth
+class optical_file:
+    def __init__(self,optical_file = None, **kwargs):
+        self.file = optical_file 
 
+class step_function: 
+    def __init__(self, tau_grid = None, lamba0 = None, tau_min = None, tau_max = None, model_count = None, **kwargs):
+        self.tau_grid = tau grid 
+        self.lamba0 = lamba0
+        self.tau_min = tau_min
+        self.tau_max = tau_max
+        self.model_count = model_count 
+
+class Optical_Depth(file, step_function):
+    def __init__ (self, optical_depth =None, **kwargs):
+        super().__init__(**kwargs)
+        self.density = optical_depth
 
 # Dusty
-class Dusty(External_Radiation, dust_properties):
+class Dusty(External_Radiation, dust_properties, Density_Distribution, Optical_Depth):
     def __init__(self,name=None, **kwargs):
         super().__init__(**kwargs)
         self.name = name
