@@ -76,25 +76,34 @@ class optical_properties_index:
 class dust_base_comp:
     def __init__(self, sil_ow=None, sil_oc=None, sil_dl=None, grf_dl=None, amc_hn=None, sic_pg=None, **kwargs):
         super().__init__(**kwargs)
-        self.sil_ow = sil_ow
-        self.sil_oc = sil_oc
-        self.sil_dl = sil_dl
-        self.grf_dl = grf_dl
-        self.amc_hn = amc_hn
-        self.sic_pg = sic_pg
+        self.gt_sil_ow = sil_ow
+        self.gt_sil_oc = sil_oc
+        self.gt_sil_dl = sil_dl
+        self.gt_grf_dl = grf_dl
+        self.gt_amc_hn = amc_hn
+        self.gt_sic_pg = sic_pg
+        self.comp_array = []
         self.file_additional_comp = []
         
     def AddFile(self, ac_files):
         for ac_file in ac_files:
             self.file_additional_comp.append(ac_file)
+
+    def FillCompArray(self):
+        self.comp_array.append(self.gt_sil_ow)
+        self.comp_array.append(self.gt_sil_oc)
+        self.comp_array.append(self.gt_sil_dl)
+        self.comp_array.append(self.gt_grf_dl)
+        self.comp_array.append(self.gt_amc_hn)
+        self.comp_array.append(self.gt_sic_pg)
             
     def standard_mixture(self):
-        self.sil_ow.value = 0.00
-        self.sil_oc.value = 0.00
-        self.sil_dl.value = 0.53
-        self.grf_dl.value = 0.47
-        self.amc_hn.value = 0.00
-        self.sic_pg.value = 0.00
+        self.gt_sil_ow = 0.00
+        self.gt_sil_oc = 0.00
+        self.gt_sil_dl = 0.53
+        self.gt_grf_dl = 0.47
+        self.gt_amc_hn = 0.00
+        self.gt_sic_pg = 0.00
 
 class dust_input_comp:
     def __init__(self, dc_file=None, **kwargs):
@@ -136,7 +145,7 @@ class dust_temp:
         super().__init__(**kwargs)
         self.temp_inner = temp_inner
 
-class dust_properties(dust_temp, dust_grain_size, dust_base_comp):
+class dust_properties(dust_temp, dust_grain_size, dust_chem_comp):
     pass
 
 
