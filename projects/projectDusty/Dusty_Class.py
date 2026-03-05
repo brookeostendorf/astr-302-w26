@@ -74,7 +74,7 @@ class optical_properties_index:
         self.optical_properties_index = index
         
 class dust_base_comp:
-    def __init__(self, sil_ow=None, sil_oc=None, sil_dl=None, grf_dl=None, amc_hn=None, sic_pg=None, **kwargs):
+    def __init__(self, sil_ow=None, sil_oc=None, sil_dl=None, grf_dl=None, amc_hn=None, sic_pg=None, ad_c=None, **kwargs):
         super().__init__(**kwargs)
         self.gt_sil_ow = sil_ow
         self.gt_sil_oc = sil_oc
@@ -83,9 +83,10 @@ class dust_base_comp:
         self.gt_amc_hn = amc_hn
         self.gt_sic_pg = sic_pg
         self.comp_array = []
+        self.additional_comp = ad_c
         self.file_additional_comp = []
         
-    def AddFile(self, ac_files):
+    def AddCompFile(self, ac_files):
         for ac_file in ac_files:
             self.file_additional_comp.append(ac_file)
 
@@ -124,11 +125,6 @@ class mrn_size():
         self.expo = expo
         self.a_min = a_min
         self.a_max = a_max
-
-    def standard_size(self):
-        self.expo.value = 3.5
-        self.a_min.value = 0.005
-        self.a_max.value = 0.25
 
 class KMH_dist_size:
     def __init__(self, expo=None, a_min=None, a0=None, **kwargs):
