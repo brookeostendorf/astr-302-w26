@@ -9,4 +9,4 @@ def write_inp_file(contents):
     with open(f"{file_name_val}.inp", "w", encoding="utf-8") as f:
         f.writelines('\n'.join(contents))
         
-    print(contents)
+    return
