@@ -226,11 +226,44 @@ class Optical_Depth(optical_file, step_function, grid_type):
 
 
 #
+#Accuracy and Output Control Flags
+#
+
+
+class Accuracy():
+    def __init__(self, qacc = None, **kwargs):
+        super().__init__(**kwargs)
+        self.qacc = qacc
+
+class Output_Ctrl_Flags():
+    def __init__(self, verb=0, spp=0, sxxx=0, ixxx=0, wavelengths=None, vxxx=0, rxxx=0, mxxx=0, **kwargs):
+        super().__init__(**kwargs)
+        self.verbosity = verb #0-3
+        self.fname_spp = spp #0-1
+        self.fname_sxxx = sxxx #0-3
+        self.fname_ixxx = ixxx #0-2
+        self.fname_ixxx_wavelengths = wavelengths #1-20
+        self.fname_ixxx_wavelengths_array = [] 
+        self.fname_vxxx = vxxx #0-3
+        self.fname_rxxx = rxxx #0-2
+        self.fname_mxxx = mxxx #0-2
+
+    def AddWavelengths(self, wavelengths):
+        for wavelength in wavelengthss:
+            self.fname_ixxx_wavelengths_array.append(wavelength)
+
+
+class Acc_and_Output_Ctrl(Output_Ctrl_Flags, Accuracy):
+    def __init__ (self, **kwargs):
+        super().__init__(**kwargs)
+
+
+#
 # Dusty
 #
 
         
-class Dusty(Optical_Depth, Density_Distribution, dust_properties, External_Radiation):
+class Dusty(Acc_and_Output_Ctrl, Optical_Depth, Density_Distribution, dust_properties, External_Radiation):
     def __init__(self,name=None, **kwargs):
         super().__init__(**kwargs)
         self.name = name
