@@ -180,7 +180,8 @@ spectrum.observe(on_change, names='value')
 spectrum_dd = widgets.HBox([label_spectrum, spectrum])
 
 #Structure
-er_box = widgets.VBox([widgets.Label("External Radiation", style=dict(font_size="22px")), 
+
+er_box = widgets.VBox([widgets.Label("External Radiation", style=dict(font_size="25px")), 
                        spectrum_dd,
                        er_section
 ])
@@ -192,7 +193,302 @@ er_box = widgets.VBox([widgets.Label("External Radiation", style=dict(font_size=
 #Dust Properties
 #
 
-dp_box = widgets.VBox([widgets.Label("Dust Properties Content")])
+#Chemical Composition Types
+
+#Standard ISM
+w_sil_ow = widgets.BoundedFloatText(
+    value=0.0,
+    min=0,
+    max=1.0,
+    step=0.001,
+    disabled=False,
+    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+)
+
+w_sil_oc = widgets.BoundedFloatText(
+    value=0.0,
+    min=0,
+    max=1.0,
+    step=0.001,
+    disabled=False,
+    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+)
+
+w_sil_dl = widgets.BoundedFloatText(
+    value=0.53,
+    min=0,
+    max=1.0,
+    step=0.001,
+    disabled=False,
+    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+)
+
+w_grf_dl = widgets.BoundedFloatText(
+    value=0.47,
+    min=0,
+    max=1.0,
+    step=0.001,
+    disabled=False,
+    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+)
+
+w_amc_hn = widgets.BoundedFloatText(
+    value=0.0,
+    min=0,
+    max=1.0,
+    step=0.001,
+    disabled=False,
+    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+)
+
+w_sic_pg = widgets.BoundedFloatText(
+    value=0.0,
+    min=0,
+    max=1.0,
+    step=0.001,
+    disabled=False,
+    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+)
+
+abundances_top_row = widgets.HBox([
+    widgets.Label("Sil-Ow", layout=widgets.Layout(width='50px', justify_content='center', margin='0 5px 0 5px')),
+    widgets.Label("Sil-Oc", layout=widgets.Layout(width='50px', justify_content='center', margin='0 5px 0 5px')),
+    widgets.Label("Sil-DL", layout=widgets.Layout(width='50px', justify_content='center', margin='0 5px 0 5px')),
+    widgets.Label("grf-DL", layout=widgets.Layout(width='50px', justify_contents='center', margin='0 5px 0 5px')),
+    widgets.Label("amC-Hn", layout=widgets.Layout(width='50px', justify_content='center', margin='0 5px 0 5px')),
+    widgets.Label("SiC-Pg", layout=widgets.Layout(width='50px', justify_content='center', margin='0 5px 0 5px')),
+])
+
+abundances_bottom_row = widgets.HBox([
+    w_sil_ow, w_sil_oc, w_sil_dl, w_grf_dl, w_amc_hn, w_sic_pg
+])
+
+abundances_box = widgets.VBox([widgets.Label("Abundances for supported grain types:", style=dict(font_size="16px")), abundances_top_row, abundances_bottom_row])
+
+#Modified Files
+mcc_files_number_bit = widgets.BoundedIntText(
+            value=1,
+            min=0,
+            max=10,
+            step=1,
+            disabled=False
+)
+
+mcc_file_tb = widgets.Text(
+    placeholder='Type names separated by commas (e.g. amC-zb1.nk, amC-zb2.nk)',
+    layout=widgets.Layout(width='320px')
+)
+
+mcc_file_abundances_tb = widgets.Text(
+    placeholder='Type numbers separated by commas (e.g. 0.45, 0.23)',
+    layout=widgets.Layout(width='320px')
+)
+
+mcc_files_box = widgets.VBox([
+widgets.Label("Additional Grain Type Files", style=dict(font_size="16px")),
+widgets.HBox([widgets.Label(value='Number of Additonal Components:'), mcc_files_number_bit]),
+widgets.HBox([widgets.Label(value='File Names:'), mcc_file_tb]),
+widgets.HBox([widgets.Label(value='Abundances of Additional Components:'), mcc_file_abundances_tb])
+])
+
+#Full Properties File
+cc_files_tb = widgets.Textarea(
+    layout=widgets.Layout(width='320px')
+)
+
+cc_file_box = widgets.VBox([
+widgets.Label("File", style=dict(font_size="16px")),
+widgets.HBox([widgets.Label(value='File Name:'), cc_files_tb])
+])
+
+#Grain Size Distribution
+
+#Modified MRN
+mrn_power_index = widgets.BoundedFloatText(
+    value=3.5,
+    min=-5.0,
+    max=10.0,
+    step=0.1,
+    disabled=False
+)
+
+mrn_lower_lim = widgets.BoundedFloatText(
+    value=0.005,
+    min=0.001,
+    max=10.0,
+    step=0.001,
+    disabled=False
+)
+
+upper_lim = widgets.BoundedFloatText(
+    value=0.25,
+    min=0.01,
+    max=1000.0,
+    step=0.01,
+    disabled=False
+)
+
+mrn_box = widgets.VBox([
+widgets.Label("Modified MRN Distribution", style=dict(font_size="16px")),
+widgets.HBox([widgets.Label(value='Power Index (q):'), mrn_power_index]),
+widgets.HBox([widgets.Label(value='Lower Limit (a(min))'), mrn_lower_lim]),
+widgets.HBox([widgets.Label(value='Upper Limit (a(max)):'), upper_lim])
+])
+
+#KMH
+kmh_power_index = widgets.BoundedFloatText(
+    value=3.5,
+    min=-5.0,
+    max=10.0,
+    step=0.1,
+    disabled=False
+)
+
+kmh_lower_lim = widgets.BoundedFloatText(
+    value=0.005,
+    min=0.001,
+    max=10.0,
+    step=0.001,
+    disabled=False
+)
+
+char_size = widgets.BoundedFloatText(
+    value=0.2,
+    min=0.01,
+    max=1000.0,
+    step=0.01,
+    disabled=False
+)
+
+kmh_box = widgets.VBox([
+widgets.Label("KMH Distribution", style=dict(font_size="16px")),
+widgets.HBox([widgets.Label(value='Power Index (q):'), kmh_power_index]),
+widgets.HBox([widgets.Label(value='Lower Limit (a(min))'), kmh_lower_lim]),
+widgets.HBox([widgets.Label(value='Characteristic Size (a0):'), char_size])
+])
+
+#Size Distribution
+size_distribution_values = [
+    ('--Select Optical Property Type--', ''),
+    ('Standard MRN Distribution', 1),
+    ('Modified MRN Distribution', 2),
+    ('KMH Distribution', 3),
+]
+
+label_size_distribution = widgets.Label(value='Size Distribution:')
+size_distribution = widgets.Dropdown(
+    options=size_distribution_values,
+    value='',
+    continuous_update=True,
+    disabled=False)
+
+gsd_section = widgets.VBox([])
+
+def gsd_visibility(change):
+            value = change['new']
+            gsd_section.children = []
+            if value == 1:
+                gsd_section.children = []
+            elif value == 2:
+                gsd_section.children = [mrn_box]
+            elif value == 3:
+                gsd_section.children = [kmh_box]
+            else:
+                gsd_section.children = []
+
+size_distribution.observe(gsd_visibility, names='value')
+
+gsd_visibility({'new': size_distribution.value})
+
+def on_change(change):
+    if change['type'] == 'change' and change['name'] == 'value':
+        print(f"Selected label: {size_distribution.label}") # Access the label
+        print(f"Selected value: {change['new']}") # Access the value
+        if len(file) > 1:
+            file[1].size_distribution = change['new']
+
+size_distribution.observe(on_change, names='value')
+
+size_distribution_dd = widgets.HBox([label_size_distribution, size_distribution])
+
+sd_box = widgets.VBox([widgets.Label("Grain Size Distribution", style=dict(font_size="20px")), 
+                       size_distribution_dd,
+                       gsd_section
+])
+
+#Dust Temps on Inner Boundary
+
+inner_temp = widgets.BoundedFloatText(
+    value=1000,
+    min=0.01,
+    max=3000,
+    step=0.01,
+    disabled=False
+)
+
+inner_temp_box = widgets.HBox([widgets.Label(value='Boundary Temp:'), inner_temp])
+
+dtib_box = widgets.VBox([widgets.Label("Dust Temperature on Inner Boundary", style=dict(font_size="20px")), 
+                       inner_temp_box
+])
+
+
+#Optical Properties Index
+
+optical_properties_values = [
+    ('--Select Optical Property Type--', ''),
+    ('Standard ISM Mixture Abundances', 1),
+    ('Modified ISM Mixture Abundances', 2),
+    ('File: Includes Absorbption and Cross Sections', 3),
+]
+
+label_optical_properties = widgets.Label(value='Optical Property:')
+optical_properties = widgets.Dropdown(
+    options=optical_properties_values,
+    value='',
+    continuous_update=True,
+    disabled=False)
+
+cc_section = widgets.VBox([])
+
+def cc_visibility(change):
+            value = change['new']
+            cc_section.children = []
+            if value == 1:
+                cc_section.children = [abundances_box,sd_box]
+            elif value == 2:
+                cc_section.children = [abundances_box, mcc_files_box, sd_box]
+            elif value == 3:
+                cc_section.children = [cc_file_box]
+            else:
+                cc_section.children = []
+
+optical_properties.observe(cc_visibility, names='value')
+
+cc_visibility({'new': optical_properties.value})
+
+def on_change(change):
+    if change['type'] == 'change' and change['name'] == 'value':
+        print(f"Selected label: {optical_properties.label}") # Access the label
+        print(f"Selected value: {change['new']}") # Access the value
+        if len(file) > 1:
+            file[1].optical_properties = change['new']
+
+optical_properties.observe(on_change, names='value')
+
+optical_properties_dd = widgets.HBox([label_optical_properties, optical_properties])
+
+cc_box = widgets.VBox([widgets.Label("Chemical Composition", style=dict(font_size="20px")), 
+                       optical_properties_dd,
+                       cc_section
+])
+
+#Structure
+
+dp_box = widgets.VBox([widgets.Label("Dust Properties", style=dict(font_size="25px")), 
+                       cc_box,
+                       dtib_box
+])
 
 #####################################################################
 
@@ -216,6 +512,7 @@ od_box = widgets.VBox([widgets.Label("Optical Depth Content")])
 #Accuracy and Output Control Flags
 #
 
+#Accuracy
 accuracy_slider = widgets.FloatSlider(
                 value=0.05,
                 min=0.01,
@@ -231,6 +528,7 @@ acc_box = widgets.VBox([
     widgets.HBox([widgets.Label(value='Numerical Accuracy (0.05 recommended):'), accuracy_slider])
 ])
 
+#Output Control Flags
 verbosity_bit = widgets.BoundedIntText(
     value=1,
     min=0,
@@ -335,6 +633,8 @@ fname_mxxx_bit = widgets.BoundedIntText(
     disabled=False
 )
 
+#Structure
+
 file_des_box = widgets.VBox([
     widgets.HBox([widgets.Label(value='Verbosity:')]),
     widgets.HBox([widgets.Label(value='Properties of Emerging Spectra;')]),
@@ -367,7 +667,7 @@ ocf_box = widgets.VBox([
 ])  
 
 aocf_box = widgets.VBox([
-    widgets.Label("Accuracy and Output Control Flags", style=dict(font_size="22px")),
+    widgets.Label("Accuracy and Output Control Flags", style=dict(font_size="25px")),
     acc_box,
     ocf_box
 ])
