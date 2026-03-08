@@ -2,12 +2,12 @@
 
 import ipywidgets as widgets
 from ipywidgets import interact, interact_manual
-from IPython.display import display, HTML
+from IPython.display import display
 
 # A file that conatins the code for all the ipywidgets in the input notebook #
 
 #Notebook Header
-title = widgets.Label(value='Dusty Input',style=dict(font_size="28px"))
+title = widgets.Label(value='Dusty Input',style=dict(font_size="30px"),layout=widgets.Layout(height='35px') )
 
 #File Name
 label_input_name = widgets.Label(value='Input File Name:')
@@ -274,7 +274,7 @@ mcc_files_number_bit = widgets.BoundedIntText(
             disabled=False
 )
 
-mcc_file_tb = widgets.Text(
+mcc_file_tb = widgets.Textarea(
     placeholder='Type names separated by commas (e.g. amC-zb1.nk, amC-zb2.nk)',
     layout=widgets.Layout(width='320px')
 )
@@ -292,7 +292,7 @@ widgets.HBox([widgets.Label(value='Abundances of Additional Components:'), mcc_f
 ])
 
 #Full Properties File
-cc_files_tb = widgets.Textarea(
+cc_files_tb = widgets.Text(
     layout=widgets.Layout(width='320px')
 )
 
@@ -682,9 +682,17 @@ parameters_directory = widgets.Tab()
 
 parameters_directory.children = [er_box, dp_box, dd_box, od_box, aocf_box]
 
-titles = ["External Radiation", "Dust Properties", "Density Distribution", "Optical Depth", "Accuracy and Output Control Flags"]
-for x, title in enumerate(titles):
-    parameters_directory.set_title(x, title)
+pm_titles = ["External Radiation", "Dust Properties", "Density Distribution", "Optical Depth", "Accuracy and Output Control Flags"]
+for x, pm_title in enumerate(pm_titles):
+    parameters_directory.set_title(x, pm_title)
+
+#####################################################################
+
+#
+#Display Function
+#
 
 def ShowWidgets():
+    display(title)
+    display(name_tb)
     display(parameters_directory)
