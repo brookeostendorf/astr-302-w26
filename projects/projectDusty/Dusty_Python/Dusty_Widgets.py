@@ -496,15 +496,250 @@ dp_box = widgets.VBox([widgets.Label("Dust Properties", style=dict(font_size="25
 #Density Distribution
 #
 
-dd_box = widgets.VBox([widgets.Label("Density Distribution Content")])
+#Distribution Calcuation Types
 
+#Broken Power Law
+label_N_number = widgets.Label(value='Number of Shell Pieces:')
+N_number = widgets.IntSlider(
+                value=1,
+                min=1,
+                max=50,
+                step=1,
+                disabled=False,
+                continuous_update=False,
+                orientation='horizontal',
+                readout=True,
+                readout_format='d'
+            )
+
+label_transition_radii = widgets.Label(value= 'Transition Radii, Factor of Change per Shell Slice:')
+transition_radii = widgets.Text(
+    placeholder = 'Input numbers separated by commas, (e.g, 10,100)',
+    layout = widgets.Layout(width = '320px')
+)
+transition_radii_tb = widgets.HBox([label_transition_radii, transition_radii])
+display(transition_radii_tb)
+
+label_power_indices = widgets.Label(value='Power Index/Indices:')
+power_indices = widgets.Text(
+    placeholder='Input numbers separated by commas (e.g. 1, 2)',
+    layout=widgets.Layout(width='320px')
+)
+
+dd_bpl_box = widgets.VBox([
+    widgets.Label("Broken Power Law", style=dict(font_size="16px")),
+    widgets.HBox([label_N_number, N_number]),
+    widgets.HBox([label_power_indices, power_indices])
+])
+#exponential decay
+label_outer_boundary = widgets.Label(value='Shell Outer Boundary:')
+outer_boundary = widgets.Text(
+    layout = widgets.Layout(width = '320px')
+)
+label_sigma_value = widgets.Label(value= 'Fall-Off Rate:')
+sigma_value = widgets.FloatSlider(
+    value = 1.0,
+    min=0.0,
+    max= 50.0,
+    step = 0.1,
+    disabled = False,
+    continuous_update = False,
+    orientation = 'horizontal',
+    readout = True,
+    readout_format = '.1f'
+)
+
+expd_box = widgets.VBox([
+    widgets.Label("Exponential Decay", style=dict(font_size="16px")),
+    widgets.HBox([label_outer_boundary,outer_boundary]),
+    widgets.HBox([label_sigma_value, sigma_value])
+])
+#exact radiatively driven winds
+#sob = shell outer boundary
+label_sob1_value = widgets.Label(value = 'Shell Outer Boundary Radius; Multiplier of Inner Boundary Radius:')
+sob1_value = widgets.Text(
+    layout = widgets.Layout(width = '320px')
+)
+
+erdw_box = widgets.VBox([
+    widgets.Label("Exact Radiatively Driven Winds", style=dict(font_size="16px")),
+    widgets.HBox([label_sob1_value, sob1_value])
+])
+
+#approx RDW
+label_sob2_value = widgets.Label(value = 'Shell Outer Boundary Radius ; Multiplier of Inner Boundary Radius:')
+sob2_value = widgets.Text(
+    layout = widgets.Layout(width = '320px')
+)
+
+ardw_box = widgets.VBox([
+    widgets.Label("Approximate Radiatively Driven Winds", style=dict(font_size="16px")),
+    widgets.HBox([label_sob2_value, sob2_value])
+])
+
+#File: Tabitulated Profiles
+label_dd_file = widgets.Label(value='File Name (file must must be ordered in increasing radius):')
+dd_file = widgets.Text(
+    layout = widgets.Layout(width = '320px')
+)
+
+dd_file_box = widgets.VBox([
+    widgets.label("Tabitulated File", style=dict(font_size="16px")),
+    widgets.Text(layout = widgets.Layout(width = '320px')
+])
+
+#density_distribution
+density_distribution_values = [
+    ('Broken Power Law', 1),
+    ('Exponential', 2),
+    ('Exact Radiatively Driven Winds', 3),
+    ('Approximate Radiatively Driven Winds', 4),
+    ('File: Tabitulated Profile', 5)
+]
+label_density_distribution = widgets.Label(value='Density Distribution Type:')
+density_distribution = widgets.Dropdown(
+    options=density_distribution_values,
+    value=1,
+    disabled=False)
+
+dd_section = widgets.VBox([])
+
+def dd_visibility(change):
+            value = change['new']
+            dd_section.children = []
+            if value == 1:
+                dd_section.children = [dd_bpl_box]
+            elif value == 2:
+                dd_section.children = [expd_box]
+            elif value == 3:
+                dd_section.children = [erdw_box]
+            elif value == 4:
+                dd_section = [ardw_box]
+            elif value == 5:
+                dd_section.children = [dd_file_box]
+            else:
+                dd_section.children = []
+
+density_distribution.observe(dd_visibility, names='value')
+
+dd_visibility({'new': density_distribution.value})
+
+def on_change(change):
+    if change['type'] == 'change' and change['name'] == 'value':
+        print(f"Selected label: {density_distribution.label}") # Access the label
+        print(f"Selected value: {change['new']}") # Access the value
+        if len(file) > 1:
+            file[1].spectrum = change['new']
+
+density_distribution.observe(on_change, names='value')
+
+density_distribution_dd = widgets.HBox([label_density_distribution, density_distribution])
+
+dd_box = widgets.VBox([
+    widgets.Label("Density Distribution Content", style=dict(font_size="25px")),
+    density_distribution_dd,
+    dd_section
+])
 #####################################################################
 
 #
 #Optical Depth
 #
 
-od_box = widgets.VBox([widgets.Label("Optical Depth Content")])
+#Step Function
+label_tau_grid = widgets.Label(value = 'Tau Grid:') 
+tau_grid = widgets.Text(
+    placeholder = 'Linear Step = 1, Logarithmic Step = 2, File = 3',
+    layout=widgets.Layout(width='320px')
+)
+
+label_lambda0 = widgets.Label(value = 'λ0 in µm:')
+lambda0_value = widgets.Text(
+    layout=widgets.Layout(width='320px')
+)
+
+label_tau_min = widgets.Label(value = 'τ min:')
+tau_min = widgets.Text(
+    layout = widgets.Layout(width='320px')
+)
+
+label_tau_max = widgets.Label(value = 'τ max:')
+tau_max = widgets.Text(
+    layout = widgets.Layout(width='320px')
+)
+
+label_model_number = widgets.Label(value='Number of Models')
+model_number = widgets.IntSlider(
+                value=1,
+                min=1,
+                max=50,
+                step=1,
+                disabled=False,
+                continuous_update=False,
+                orientation='horizontal',
+                readout=True,
+                readout_format='d'
+            )
+
+sf_box = widgets.VBox([
+    widgets.Label("Step Function", style=dict(font_size="16px")),
+    widgets.HBox([label_tau_grid, tau_grid]),
+    widgets.HBox([label_lambda0, lambda0_value]),
+    widgets.HBox([label_tau_min, tau_min]),
+    widgets.HBox([label_tau_max, tau_max]),
+    widgets.HBox([label_model_number, model_number])
+])
+    
+#File Upload
+label_od_file = widgets.Label(value='File Name (file header must end with λ0, preceeded :')
+od_file = widgets.Text(
+    layout = widgets.Layout(width = '320px')
+)
+
+od_file_box = widgets.VBox([
+    widgets.Label("Optical Depth File", style=dict(font_size="16px")),
+    widgets.HBox([label_od_file, od_file])
+])
+optical_depth_values = [
+    ('Step Function: Linear', 1),
+    ('Step Function: Logarithmic', 2),
+    ('File: tau_grid', 3)
+]
+label_optical_depth = widgets.Label(value='Optical Depth Type:')
+optical_depth = widgets.Dropdown(
+    options = optical_depth_values,
+    value=1,
+    disabled=False)
+
+od_section = widgets.VBox([])
+
+def od_visibility(change):
+            value = change['new']
+            od_section.children = []
+            elif value in [1,2]:
+                od_section.children = [sf_box]
+            if value == 3:
+                od_section.children = [od_file_box]
+            else:
+                od_section.children = []
+
+optical_depth.observe(od_visibility, names='value')
+
+od_visibility({'new': optical_depth.value})
+
+def on_change(change):
+    if change['type'] == 'change' and change['name'] == 'value':
+        print(f"Selected label: {optical_depth.label}") # Access the label
+        print(f"Selected value: {change['new']}") # Access the value
+        if len(file) > 1:
+            file[1].optical_depth = change   
+
+optical_depth_dd = widgets.HBox([label_optical_depth, optical_depth])
+
+od_box = widgets.VBox([widgets.Label("Optical Depth Content", style=dict(font_size="25px")),
+                      optical_depth_dd,
+                      od_section
+])
 
 #####################################################################
 
