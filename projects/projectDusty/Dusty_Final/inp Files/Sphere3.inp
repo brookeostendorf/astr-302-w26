@@ -1,0 +1,29 @@
+spectrum= 4
+quasar.dat
+optical_properties_index= 2
+comp_array= 0.0, 0.0, 0.53, 0.47, 0.0, 0.0
+additional_comp= 3
+amC-zb1.nk
+amC-zb2.nk
+amC-zb3.nk
+add_comp_abundance= 0.45, 0.10, 0.23
+size_distribution= 2
+mrn_expo= 3.5
+mrn_a_min= 0.01
+mrn_a_max= 0.5
+temp_inner= 1000.0
+density_type= 5
+collapse.dat
+tau_grid= 3
+taugrid.dat
+qacc= 0.05
+verbosity= 1
+fname_spp= 1
+fname_sxxx= 1
+fname_ixxx= 1
+fname_ixxx_wavelengths= 8
+fname_ixxx_wavelengths_array= 0.55, 1, 2.2, 4, 10, 50, 100, 1000
+fname_vxxx= 1
+fname_rxxx= 1
+fname_mxxx= 1
+name= Sphere3
