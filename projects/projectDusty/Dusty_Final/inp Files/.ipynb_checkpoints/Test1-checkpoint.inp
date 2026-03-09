@@ -1,0 +1,17 @@
+spectrum= 2
+pl_n= 1
+pl_lambda= 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+pl_k= 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
+density_type= 5
+dd.dat
+tau_min= 52
+tau_max= 5
+model_count= 8
+verbosity= 1
+fname_spp= 0
+fname_sxxx= 0
+fname_ixxx= 0
+fname_vxxx= 0
+fname_rxxx= 0
+fname_mxxx= 0
+name= Test1

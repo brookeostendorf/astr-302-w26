@@ -117,7 +117,7 @@ class dust_chem_comp(dust_input_comp, dust_base_comp, optical_properties_index):
 class size_distribution:
     def __init__(self, size_dist=None, **kwargs):
         super().__init__(**kwargs)
-        self.size_distrubution = size_dist
+        self.size_distribution = size_dist
 
 class mrn_size():
     def __init__(self, expo=None, a_min=None, a_max=None, **kwargs):
@@ -150,10 +150,10 @@ class dust_properties(dust_temp, dust_grain_size, dust_chem_comp):
 #
 
 
-class density_type:
+class density:
     def __init__(self, density_type=None, **kwargs):
         super().__init__(**kwargs)
-        self.denstiy_type = density_type
+        self.density_type = density_type
     
 class dd_file: 
     def __init__(self, dd_file = None, **kwargs):
@@ -191,7 +191,7 @@ class broken_PL:
         for power_index in power_indices:
             self.power_indices.append(power_index)
   
-class Density_Distribution(dd_file, approx_RDW, exact_RDW, exponential_decay, broken_PL, density_type):
+class Density_Distribution(dd_file, approx_RDW, exact_RDW, exponential_decay, broken_PL, density):
     def __init__ (self, **kwargs):
         super().__init__(**kwargs)
 
@@ -207,15 +207,15 @@ class optical_file:
         self.file_opt = optical_file 
 
 class step_function: 
-    def __init__(self, tau_grid = None, lamba0 = None, tau_min = None, tau_max = None, model_count = None, **kwargs):
+    def __init__(self, tau_grid = None, lambda0 = None, tau_min = None, tau_max = None, model_count = None, **kwargs):
         super().__init__(**kwargs)
         self.tau_grid = tau_grid 
-        self.lamba0 = lamba0
+        self.lambda0 = lambda0
         self.tau_min = tau_min
         self.tau_max = tau_max
         self.model_count = model_count 
 
-class Optical_Depth(optical_file, step_function, grid_type):
+class Optical_Depth(optical_file, step_function):
     def __init__ (self, **kwargs):
         super().__init__(**kwargs)
 

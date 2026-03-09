@@ -3,11 +3,10 @@
 import ipywidgets as widgets
 from ipywidgets import interact, interact_manual
 from IPython.display import display
+import os
 
 # A file that conatins the code for all the ipywidgets in the input notebook #
 
-#Notebook Header
-title = widgets.Label(value='Dusty Input',style=dict(font_size="30px"),layout=widgets.Layout(height='35px') )
 
 #File Name
 label_input_name = widgets.Label(value='Input File Name:')
@@ -15,7 +14,13 @@ input_name = widgets.Text(
                 placeholder='Name File',
                 disabled=False
             )
-name_tb = widgets.HBox([label_input_name, input_name])
+name_tb = widgets.HBox([label_input_name, input_name], 
+                       layout=widgets.Layout(
+                           margin='20px 0 30px 0', 
+                           padding='10px', 
+                           border='1px solid #ddd',
+                           align_items='center')
+                      )
 
 ##################################################################
 
@@ -181,7 +186,13 @@ spectrum_dd = widgets.HBox([label_spectrum, spectrum])
 
 #Structure
 
-er_box = widgets.VBox([widgets.Label("External Radiation", style=dict(font_size="25px")), 
+er_box = widgets.VBox([widgets.Label("External Radiation", 
+                             style=dict(font_size="25px"), 
+                             layout=widgets.Layout(
+                                 height='35px',
+                                 margin='5px 0 10px 0', 
+                                 padding='5px')
+                                    ), 
                        spectrum_dd,
                        er_section
 ])
@@ -485,7 +496,12 @@ cc_box = widgets.VBox([widgets.Label("Chemical Composition", style=dict(font_siz
 
 #Structure
 
-dp_box = widgets.VBox([widgets.Label("Dust Properties", style=dict(font_size="25px")), 
+dp_box = widgets.VBox([widgets.Label("Dust Properties", style=dict(font_size="25px"), 
+                             layout=widgets.Layout(
+                                 height='35px',
+                                 margin='5px 0 10px 0', 
+                                 padding='5px')
+                                    ), 
                        cc_box,
                        dtib_box
 ])
@@ -518,7 +534,6 @@ transition_radii = widgets.Text(
     layout = widgets.Layout(width = '320px')
 )
 transition_radii_tb = widgets.HBox([label_transition_radii, transition_radii])
-display(transition_radii_tb)
 
 label_power_indices = widgets.Label(value='Power Index/Indices:')
 power_indices = widgets.Text(
@@ -529,6 +544,7 @@ power_indices = widgets.Text(
 dd_bpl_box = widgets.VBox([
     widgets.Label("Broken Power Law", style=dict(font_size="16px")),
     widgets.HBox([label_N_number, N_number]),
+    transition_radii_tb,
     widgets.HBox([label_power_indices, power_indices])
 ])
 #exponential decay
@@ -584,22 +600,23 @@ dd_file = widgets.Text(
 )
 
 dd_file_box = widgets.VBox([
-    widgets.label("Tabitulated File", style=dict(font_size="16px")),
-    widgets.Text(layout = widgets.Layout(width = '320px')
+    widgets.Label("Tabulated File", style=dict(font_size="16px")),
+    widgets.HBox([label_dd_file, dd_file])
 ])
 
 #density_distribution
 density_distribution_values = [
+    ('--Select Denstity Distribution Type--', ''),
     ('Broken Power Law', 1),
     ('Exponential', 2),
     ('Exact Radiatively Driven Winds', 3),
     ('Approximate Radiatively Driven Winds', 4),
-    ('File: Tabitulated Profile', 5)
+    ('File: Tabulated Profile', 5)
 ]
 label_density_distribution = widgets.Label(value='Density Distribution Type:')
 density_distribution = widgets.Dropdown(
     options=density_distribution_values,
-    value=1,
+    value='',
     disabled=False)
 
 dd_section = widgets.VBox([])
@@ -614,7 +631,7 @@ def dd_visibility(change):
             elif value == 3:
                 dd_section.children = [erdw_box]
             elif value == 4:
-                dd_section = [ardw_box]
+                dd_section.children = [ardw_box]
             elif value == 5:
                 dd_section.children = [dd_file_box]
             else:
@@ -636,7 +653,12 @@ density_distribution.observe(on_change, names='value')
 density_distribution_dd = widgets.HBox([label_density_distribution, density_distribution])
 
 dd_box = widgets.VBox([
-    widgets.Label("Density Distribution Content", style=dict(font_size="25px")),
+    widgets.Label("Density Distribution Content", style=dict(font_size="25px"),
+                  layout=widgets.Layout(
+                                 height='35px',
+                                 margin='5px 0 10px 0', 
+                                 padding='5px')
+                 ),
     density_distribution_dd,
     dd_section
 ])
@@ -683,7 +705,6 @@ model_number = widgets.IntSlider(
 
 sf_box = widgets.VBox([
     widgets.Label("Step Function", style=dict(font_size="16px")),
-    widgets.HBox([label_tau_grid, tau_grid]),
     widgets.HBox([label_lambda0, lambda0_value]),
     widgets.HBox([label_tau_min, tau_min]),
     widgets.HBox([label_tau_max, tau_max]),
@@ -701,6 +722,7 @@ od_file_box = widgets.VBox([
     widgets.HBox([label_od_file, od_file])
 ])
 optical_depth_values = [
+    ('--Select Optical Depth Type--', ''),
     ('Step Function: Linear', 1),
     ('Step Function: Logarithmic', 2),
     ('File: tau_grid', 3)
@@ -708,7 +730,7 @@ optical_depth_values = [
 label_optical_depth = widgets.Label(value='Optical Depth Type:')
 optical_depth = widgets.Dropdown(
     options = optical_depth_values,
-    value=1,
+    value='',
     disabled=False)
 
 od_section = widgets.VBox([])
@@ -716,9 +738,9 @@ od_section = widgets.VBox([])
 def od_visibility(change):
             value = change['new']
             od_section.children = []
-            elif value in [1,2]:
+            if value in [1,2]:
                 od_section.children = [sf_box]
-            if value == 3:
+            elif value == 3:
                 od_section.children = [od_file_box]
             else:
                 od_section.children = []
@@ -736,7 +758,12 @@ def on_change(change):
 
 optical_depth_dd = widgets.HBox([label_optical_depth, optical_depth])
 
-od_box = widgets.VBox([widgets.Label("Optical Depth Content", style=dict(font_size="25px")),
+od_box = widgets.VBox([widgets.Label("Optical Depth Content", style=dict(font_size="25px"),
+                                    layout=widgets.Layout(
+                                 height='35px',
+                                 margin='5px 0 10px 0', 
+                                 padding='5px')
+                                    ),
                       optical_depth_dd,
                       od_section
 ])
@@ -902,7 +929,12 @@ ocf_box = widgets.VBox([
 ])  
 
 aocf_box = widgets.VBox([
-    widgets.Label("Accuracy and Output Control Flags", style=dict(font_size="25px")),
+    widgets.Label("Accuracy and Output Control Flags", style=dict(font_size="25px"),
+                 layout=widgets.Layout(
+                                 height='35px',
+                                 margin='5px 0 10px 0', 
+                                 padding='5px')
+                 ),
     acc_box,
     ocf_box
 ])
@@ -915,7 +947,9 @@ aocf_box = widgets.VBox([
                 
 parameters_directory = widgets.Tab()                
 
-parameters_directory.children = [er_box, dp_box, dd_box, od_box, aocf_box]
+tab_children = [er_box, dp_box, dd_box, od_box, aocf_box]
+
+parameters_directory.children = tab_children
 
 pm_titles = ["External Radiation", "Dust Properties", "Density Distribution", "Optical Depth", "Accuracy and Output Control Flags"]
 for x, pm_title in enumerate(pm_titles):
@@ -928,6 +962,5 @@ for x, pm_title in enumerate(pm_titles):
 #
 
 def ShowWidgets():
-    display(title)
     display(name_tb)
     display(parameters_directory)
