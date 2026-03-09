@@ -34,8 +34,39 @@ def attribution ():
 #Dust Properties
     
 #Density Distribution
+    file.density_distribution = density_distribution.value
+    if density_distribution.value == 1:
+        file.N_value = N_number.value
+        transition_radii_list = transition_radii.value.split(",")
+        file.add_radii(transition_radii_list)
+        power_indices_list = power_indices.value.split(",")
+        file.add_power_index(power_indices_list)
+
+    if density_distribution.value == 2:
+        file.radius = outer_boundary.value
+        file.sigma = sigma_value.value
+
+    if density_distribution == 3:
+        file.radius = sob1_value.value
+
+    if density_distribution == 4:
+        file.radius = sob2_value.value
+
+    if density_distribution == 5:
+        file.file = dd_file.value
+
 
 #Optical Depth
+    file.optical_depth = optical_depth.value
+    if optical_depth.value >= 1 and optical_depth.value <= 2:
+        file.tau_grid = tau_grid.value
+        file.lamba0 = lambda0_value.value
+        file.tau_min = tau_min.value
+        file.tau_max = tau_max.value
+        file.model_count = model_number.value
+
+    if optical_depth.value == 3:
+        file.file = od_file.value
 
 #Accuracy and Output Control
     file.qaa = accuracy_slider.value
