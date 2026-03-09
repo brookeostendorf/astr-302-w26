@@ -213,7 +213,7 @@ w_sil_ow = widgets.BoundedFloatText(
     max=1.0,
     step=0.001,
     disabled=False,
-    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+    layout=widgets.Layout(width='60px', margin='0 5px 0 5px')
 )
 
 w_sil_oc = widgets.BoundedFloatText(
@@ -222,7 +222,7 @@ w_sil_oc = widgets.BoundedFloatText(
     max=1.0,
     step=0.001,
     disabled=False,
-    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+    layout=widgets.Layout(width='60px', margin='0 5px 0 5px')
 )
 
 w_sil_dl = widgets.BoundedFloatText(
@@ -231,7 +231,7 @@ w_sil_dl = widgets.BoundedFloatText(
     max=1.0,
     step=0.001,
     disabled=False,
-    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+    layout=widgets.Layout(width='60px', margin='0 5px 0 5px')
 )
 
 w_grf_dl = widgets.BoundedFloatText(
@@ -240,7 +240,7 @@ w_grf_dl = widgets.BoundedFloatText(
     max=1.0,
     step=0.001,
     disabled=False,
-    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+    layout=widgets.Layout(width='60px', margin='0 5px 0 5px')
 )
 
 w_amc_hn = widgets.BoundedFloatText(
@@ -249,7 +249,7 @@ w_amc_hn = widgets.BoundedFloatText(
     max=1.0,
     step=0.001,
     disabled=False,
-    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+    layout=widgets.Layout(width='60px', margin='0 5px 0 5px')
 )
 
 w_sic_pg = widgets.BoundedFloatText(
@@ -258,7 +258,7 @@ w_sic_pg = widgets.BoundedFloatText(
     max=1.0,
     step=0.001,
     disabled=False,
-    layout=widgets.Layout(width='50px', margin='0 5px 0 5px')
+    layout=widgets.Layout(width='60px', margin='0 5px 0 5px')
 )
 
 abundances_top_row = widgets.HBox([
@@ -331,7 +331,7 @@ mrn_lower_lim = widgets.BoundedFloatText(
     disabled=False
 )
 
-upper_lim = widgets.BoundedFloatText(
+mrn_upper_lim = widgets.BoundedFloatText(
     value=0.25,
     min=0.01,
     max=1000.0,
@@ -343,7 +343,7 @@ mrn_box = widgets.VBox([
 widgets.Label("Modified MRN Distribution", style=dict(font_size="16px")),
 widgets.HBox([widgets.Label(value='Power Index (q):'), mrn_power_index]),
 widgets.HBox([widgets.Label(value='Lower Limit (a(min))'), mrn_lower_lim]),
-widgets.HBox([widgets.Label(value='Upper Limit (a(max)):'), upper_lim])
+widgets.HBox([widgets.Label(value='Upper Limit (a(max)):'), mrn_upper_lim])
 ])
 
 #KMH
@@ -363,7 +363,7 @@ kmh_lower_lim = widgets.BoundedFloatText(
     disabled=False
 )
 
-char_size = widgets.BoundedFloatText(
+kmh_char_size = widgets.BoundedFloatText(
     value=0.2,
     min=0.01,
     max=1000.0,
@@ -375,7 +375,7 @@ kmh_box = widgets.VBox([
 widgets.Label("KMH Distribution", style=dict(font_size="16px")),
 widgets.HBox([widgets.Label(value='Power Index (q):'), kmh_power_index]),
 widgets.HBox([widgets.Label(value='Lower Limit (a(min))'), kmh_lower_lim]),
-widgets.HBox([widgets.Label(value='Characteristic Size (a0):'), char_size])
+widgets.HBox([widgets.Label(value='Characteristic Size (a0):'), kmh_char_size])
 ])
 
 #Size Distribution
@@ -646,7 +646,7 @@ def on_change(change):
         print(f"Selected label: {density_distribution.label}") # Access the label
         print(f"Selected value: {change['new']}") # Access the value
         if len(file) > 1:
-            file[1].spectrum = change['new']
+            file[1].density_distribution = change['new']
 
 density_distribution.observe(on_change, names='value')
 
@@ -755,6 +755,8 @@ def on_change(change):
         print(f"Selected value: {change['new']}") # Access the value
         if len(file) > 1:
             file[1].optical_depth = change   
+            
+optical_depth.observe(on_change, names='value')
 
 optical_depth_dd = widgets.HBox([label_optical_depth, optical_depth])
 

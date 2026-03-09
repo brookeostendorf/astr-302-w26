@@ -2,8 +2,7 @@
 
 #Function that reads the atrributes of an object, converts the values of defined attributes into properly formatted text strings, and puts the strings in an array#
 
-def inspect_attributes(obj):
-    dusty_order = [
+dusty_order = [
     # 1. External_Radiation (Rightmost Parent)
     'spectrum',                       # From Spectrum
     'number_of_bb', 'temperatures', 'luminosities', # From Combination_BB
@@ -13,13 +12,12 @@ def inspect_attributes(obj):
 
     # 2. dust_properties
     'optical_properties_index',       # From optical_properties_index
-    'gt_sil_ow', 'gt_sil_oc', 'gt_sil_dl', 'gt_grf_dl', 
-    'gt_amc_hn', 'gt_sic_pg', 'comp_array', 
-    'additional_comp', 'file_additional_comp', # From dust_base_comp
+    'comp_array', 
+    'additional_comp', 'file_additional_comp', 'add_comp_abundance',  # From dust_base_comp 
     'file_dust_comp',                 # From dust_input_comp
-    'size_distribution',              # From size_distribution (Note typo in your class: distrubution)
-    'expo', 'a_min', 'a_max',         # From mrn_size
-    'a0',                             # From KMH_dist_size (expo/a_min overlap)
+    'size_distribution',              # From size_distribution 
+    'mrn_expo', 'mrn_a_min', 'mrn_a_max', # From mrn_size
+    'kmh_expo', 'kmh_a_min','kmh_a0', # From KMH_dist_size 
     'temp_inner',                     # From dust_temp
 
     # 3. Density_Distribution
@@ -42,7 +40,7 @@ def inspect_attributes(obj):
     'name'                            # Defined in Dusty.__init__
 ]
 
-    
+def inspect_attributes(obj):
     content = []
 
     for attr in dusty_order:

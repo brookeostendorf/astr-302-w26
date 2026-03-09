@@ -85,26 +85,20 @@ class dust_base_comp:
         self.comp_array = []
         self.additional_comp = ad_c
         self.file_additional_comp = []
-        
+        self.add_comp_abundance = []
+
+    def FillCompArray(self, comps):
+        for comp in comps:
+            self.comp_array.append(comp)
+    
     def AddCompFile(self, ac_files):
         for ac_file in ac_files:
             self.file_additional_comp.append(ac_file)
-
-    def FillCompArray(self):
-        self.comp_array.append(self.gt_sil_ow)
-        self.comp_array.append(self.gt_sil_oc)
-        self.comp_array.append(self.gt_sil_dl)
-        self.comp_array.append(self.gt_grf_dl)
-        self.comp_array.append(self.gt_amc_hn)
-        self.comp_array.append(self.gt_sic_pg)
             
-    def standard_mixture(self):
-        self.gt_sil_ow = 0.00
-        self.gt_sil_oc = 0.00
-        self.gt_sil_dl = 0.53
-        self.gt_grf_dl = 0.47
-        self.gt_amc_hn = 0.00
-        self.gt_sic_pg = 0.00
+    def AddCompAbundance(self, abundances):
+        for abd in abundances:
+            self.add_comp_abundance.append(abd)
+
 
 class dust_input_comp:
     def __init__(self, dc_file=None, **kwargs):
@@ -120,18 +114,18 @@ class size_distribution:
         self.size_distribution = size_dist
 
 class mrn_size():
-    def __init__(self, expo=None, a_min=None, a_max=None, **kwargs):
+    def __init__(self, mrn_expo=None, mrn_a_min=None, mrn_a_max=None, **kwargs):
         super().__init__(**kwargs)
-        self.expo = expo
-        self.a_min = a_min
-        self.a_max = a_max
+        self.mrn_expo = mrn_expo
+        self.mrn_a_min = mrn_a_min
+        self.mrn_a_max = mrn_a_max
 
 class KMH_dist_size:
-    def __init__(self, expo=None, a_min=None, a0=None, **kwargs):
+    def __init__(self, kmh_expo=None, kmh_a_min=None, kmh_a0=None, **kwargs):
         super().__init__(**kwargs)
-        self.expo = expo
-        self.a_min = a_min
-        self.a0 = a0
+        self.kmh_expo = kmh_expo
+        self.kmh_a_min = kmh_a_min
+        self.kmh_a0 = kmh_a0
 
 class dust_grain_size(KMH_dist_size, mrn_size, size_distribution):
     pass
@@ -244,7 +238,7 @@ class Output_Ctrl_Flags():
         self.fname_mxxx = mxxx #0-2
 
     def AddWavelengths(self, wavelengths):
-        for wavelength in wavelengthss:
+        for wavelength in wavelengths:
             self.fname_ixxx_wavelengths_array.append(wavelength)
 
 
