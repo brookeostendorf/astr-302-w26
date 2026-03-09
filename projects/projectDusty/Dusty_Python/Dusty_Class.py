@@ -200,12 +200,7 @@ class Density_Distribution(dd_file, approx_RDW, exact_RDW, exponential_decay, br
 # OpticalDepth
 #
 
-
-class grid_type:
-    def __init__(self, grid_type=None, **kwargs):
-        super().__init__(**kwargs)
-        self.grid_type = grid_type
-        
+#I removed the grid type class, as the tau_grid IS the grid type
 class optical_file:
     def __init__(self, optical_file = None, **kwargs):
         super().__init__(**kwargs)
