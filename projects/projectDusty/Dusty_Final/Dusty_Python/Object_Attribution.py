@@ -36,11 +36,10 @@ def attribution ():
     ExecuteButton.file.fname_ixxx_wavelengths_array = []
     
     spec_val = Dusty_Widgets.spectrum.value
-    sd_val = Dusty_Widgets.size_distribution.value
-#    op_val = Dusty_Widgets.optical_properties.value  op_val,
+    op_val = Dusty_Widgets.optical_properties.value
     dd_val = Dusty_Widgets.density_distribution.value
     od_val = Dusty_Widgets.optical_depth.value
-    selections = [spec_val, sd_val, dd_val, od_val]
+    selections = [spec_val, op_val, dd_val, od_val]
     
     if '' in selections:
         print("Error: One or more dropdowns are unselected. Please verify all categories.")
@@ -56,14 +55,14 @@ def attribution ():
         lums_list = [w.strip() for w in Dusty_Widgets.lums.value.split(",") if w.strip()]
         ExecuteButton.file.AddLuminosity(lums_list)
         
-    if Dusty_Widgets.spectrum.value == 2:
+    if Dusty_Widgets.spectrum.value == 3:
         ExecuteButton.file.pl_n = Dusty_Widgets.N_functions_itb.value
         lambdas_list = [w.strip() for w in Dusty_Widgets.lambdas_tb.value.split(",") if w.strip()]
         ExecuteButton.file.AddLambdas(lambdas_list)
         p_indicies_list = [w.strip() for w in Dusty_Widgets.power_indicies_tb.value.split(",") if w.strip()]
         ExecuteButton.file.AddKs(p_indicies_list)
     
-    if Dusty_Widgets.spectrum.value == 3:
+    if Dusty_Widgets.spectrum.value == 2:
         ExecuteButton.file.tbb = Dusty_Widgets.tbb_temp_tb.value
         ExecuteButton.file.sio_fd = clean_val(Dusty_Widgets.sio_fd_slider.value)
     
@@ -90,7 +89,7 @@ def attribution ():
             ExecuteButton.file.AddCompAbundance(mcc_abundances_list)
     
     elif Dusty_Widgets.optical_properties.value == 3:
-        ExecuteButton.file.file_dust_comp = Dusty_Widgets.cc_files.value
+        ExecuteButton.file.file_dust_comp = Dusty_Widgets.cc_files_tb.value
         
     ExecuteButton.file.size_distribution = Dusty_Widgets.size_distribution.value
     if Dusty_Widgets.size_distribution.value == 2:
