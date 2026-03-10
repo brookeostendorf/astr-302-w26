@@ -139,8 +139,8 @@ widgets.HBox([widgets.Label(value='File Name (file must have λ in µm):'), er_f
 spectrum_values = [
     ('--Select Spectrum Type--', ''),
     ('Combination Black Body', 1),
-    ('Broken Power Law', 2),
-    ('Engelke-Marengo Function', 3),
+    ('Engelke-Marengo Function', 2),
+    ('Broken Power Law', 3),
     ('File: λ F_λ', 4),
     ('File: F_λ', 5),
     ('File: F_ν vs. λ', 6)  
@@ -161,9 +161,9 @@ def er_visibility(change):
             if value == 1:
                 er_section.children = [cbb_box]
             elif value == 2:
-                er_section.children = [bpl_box]
-            elif value == 3:
                 er_section.children = [emf_box]
+            elif value == 3:
+                er_section.children = [bpl_box]
             elif value in [4, 5, 6]:
                 er_section.children = [er_file_box]
             else:

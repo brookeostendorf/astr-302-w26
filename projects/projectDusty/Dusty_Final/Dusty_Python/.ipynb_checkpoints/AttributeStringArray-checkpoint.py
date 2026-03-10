@@ -6,8 +6,8 @@ dusty_order = [
     # 1. External_Radiation (Rightmost Parent)
     'spectrum',                       # From Spectrum
     'number_of_bb', 'temperatures', 'luminosities', # From Combination_BB
-    'pl_n', 'pl_lambda', 'pl_k',      # From Broken_PL
     'tbb', 'sio_fd',                  # From BB_Engelke_Marengo
+    'pl_n', 'pl_lambda', 'pl_k',      # From Broken_PL
     'file_er',                        # From ER_Files
 
     # 2. dust_properties
